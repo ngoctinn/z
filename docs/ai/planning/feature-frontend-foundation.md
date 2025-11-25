@@ -20,18 +20,18 @@ description: Phân tích công việc thành các nhiệm vụ có thể thực 
 
 ### Giai Đoạn 1: Nền Tảng
 
-- [ ] Nhiệm vụ 1.1: Khởi tạo dự án Next.js với pnpm
-- [ ] Nhiệm vụ 1.2: Cài đặt Shadcn/UI
+- [x] Nhiệm vụ 1.1: Khởi tạo dự án Next.js với pnpm
+- [x] Nhiệm vụ 1.2: Cài đặt Shadcn/UI
 
 ### Giai Đoạn 2: Tính Năng Cốt Lõi
 
-- [ ] Nhiệm vụ 2.1: Thêm components UI cơ bản
-- [ ] Nhiệm vụ 2.2: Test dev server
+- [x] Nhiệm vụ 2.1: Thêm components UI cơ bản (Đã hoàn thành, thêm trang test components)
+- [x] Nhiệm vụ 2.2: Test dev server (Đã chạy thành công trên port 3000)
 
 ### Giai Đoạn 3: Tích Hợp & Hoàn Chỉnh
 
-- [ ] Nhiệm vụ 3.1: Cập nhật docs
-- [ ] Nhiệm vụ 3.2: Kiểm tra lỗi
+- [x] Nhiệm vụ 3.1: Cập nhật docs (Đã cập nhật README.md với hướng dẫn chi tiết)
+- [x] Nhiệm vụ 3.2: Kiểm tra lỗi (Đã verify dev server và components hoạt động tốt)
 
 ## Phụ Thuộc
 
