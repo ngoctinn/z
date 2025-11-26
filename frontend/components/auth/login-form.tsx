@@ -1,13 +1,14 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Lock, Mail } from "lucide-react";
+import { Loader2, Lock, Mail } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { toast } from "sonner";
 import * as z from "zod";
 
+import { showToast } from "@/components/common/custom-toast";
 import { InputWithIcon } from "@/components/common/input-with-icon";
 import { PasswordInput } from "@/components/common/password-input";
 import { Button } from "@/components/ui/button";
@@ -40,6 +41,7 @@ const formSchema = z.object({
 
 export function LoginForm() {
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -49,25 +51,28 @@ export function LoginForm() {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    setIsLoading(true);
     const supabase = createClient();
 
-    const { error } = await supabase.auth.signInWithPassword({
-      email: values.email,
-      password: values.password,
-    });
-
-    if (error) {
-      toast.error("Đăng nhập thất bại", {
-        description: error.message === "Invalid login credentials"
-          ? "Email hoặc mật khẩu không chính xác."
-          : error.message,
+    try {
+      const { error } = await supabase.auth.signInWithPassword({
+        email: values.email,
+        password: values.password,
       });
-      return;
-    }
 
-    toast.success("Đăng nhập thành công");
-    router.push("/");
-    router.refresh();
+      if (error) {
+        showToast.error("Đăng nhập thất bại", error.message === "Invalid login credentials"
+            ? "Email hoặc mật khẩu không chính xác."
+            : error.message);
+        return;
+      }
+
+      showToast.success("Đăng nhập thành công");
+      router.push("/");
+      router.refresh();
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   return (
@@ -115,8 +120,8 @@ export function LoginForm() {
                 </FormItem>
               )}
             />
-            <Button type="submit" className="w-full">
-              Đăng nhập
+            <Button type="submit" className="w-full" disabled={isLoading}>
+              {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : "Đăng nhập"}
             </Button>
           </form>
         </Form>

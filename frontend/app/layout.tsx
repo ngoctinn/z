@@ -32,7 +32,7 @@ export default function RootLayout({
         className={`${inter.variable} ${beVietnamPro.variable} antialiased font-sans`}
       >
         {children}
-        <Toaster />
+        <Toaster position="bottom-right" />
       </body>
     </html>
   );

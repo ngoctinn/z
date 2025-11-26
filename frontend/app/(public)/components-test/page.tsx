@@ -5,21 +5,6 @@ import { InputWithIcon } from "@/components/common/input-with-icon";
 import { PasswordInput } from "@/components/common/password-input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Separator } from "@/components/ui/separator";
-import { Switch } from "@/components/ui/switch";
-import { Bell, Lock, Mail, Search } from "lucide-react";
-import { toast } from "sonner";
-
-export default function ComponentsTestPage() {
-  return (
-    <div className="container mx-auto py-10 space-y-10">
-      <div className="space-y-2">
-        <h1 className="text-3xl font-bold tracking-tight">Components Showcase</h1>
-        <p className="text-muted-foreground">
-          A collection of components for testing and verification.
         </p>
       </div>
 
@@ -110,20 +95,17 @@ export default function ComponentsTestPage() {
       <section className="space-y-6">
         <h2 className="text-2xl font-semibold tracking-tight">Feedback</h2>
         <div className="flex gap-4">
-            <Button variant="outline" onClick={() => toast("Event has been created", {
-              description: "Sunday, December 03, 2023 at 9:00 AM",
-              action: {
-                label: "Undo",
-                onClick: () => console.log("Undo"),
-              },
-            })}>
-              Show Toast
+            <Button variant="outline" onClick={() => showToast.info("Event has been created", "Sunday, December 03, 2023 at 9:00 AM")}>
+              Show Info
             </Button>
-            <Button variant="outline" onClick={() => toast.success("Success message")}>
+            <Button variant="outline" onClick={() => showToast.success("Success message", "Operation completed successfully")}>
               Show Success
             </Button>
-            <Button variant="outline" onClick={() => toast.error("Error message")}>
+            <Button variant="outline" onClick={() => showToast.error("Error message", "Something went wrong")}>
               Show Error
+            </Button>
+            <Button variant="outline" onClick={() => showToast.warning("Warning message", "Please be careful")}>
+              Show Warning
             </Button>
         </div>
       </section>
