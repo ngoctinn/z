@@ -3,7 +3,9 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Lock, Mail } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import * as z from "zod";
 
 import { InputWithIcon } from "@/components/common/input-with-icon";
@@ -25,6 +27,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { createClient } from "@/lib/supabase/client";
 
 const formSchema = z.object({
   email: z.string().email({
@@ -36,6 +39,7 @@ const formSchema = z.object({
 });
 
 export function LoginForm() {
+  const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -44,9 +48,26 @@ export function LoginForm() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // TODO: Handle login logic
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    const supabase = createClient();
+
+    const { error } = await supabase.auth.signInWithPassword({
+      email: values.email,
+      password: values.password,
+    });
+
+    if (error) {
+      toast.error("Đăng nhập thất bại", {
+        description: error.message === "Invalid login credentials"
+          ? "Email hoặc mật khẩu không chính xác."
+          : error.message,
+      });
+      return;
+    }
+
+    toast.success("Đăng nhập thành công");
+    router.push("/");
+    router.refresh();
   }
 
   return (

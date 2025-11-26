@@ -3,7 +3,9 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Lock, Mail, User } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import * as z from "zod";
 
 import { InputWithIcon } from "@/components/common/input-with-icon";
@@ -25,6 +27,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { createClient } from "@/lib/supabase/client";
 
 const formSchema = z
   .object({
@@ -45,6 +48,7 @@ const formSchema = z
   });
 
 export function RegisterForm() {
+  const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -55,9 +59,32 @@ export function RegisterForm() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // TODO: Handle register logic
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    const supabase = createClient();
+
+    const { error } = await supabase.auth.signUp({
+      email: values.email,
+      password: values.password,
+      options: {
+        data: {
+          full_name: values.name,
+        },
+      },
+    });
+
+    if (error) {
+      toast.error("Đăng ký thất bại", {
+        description: error.message,
+      });
+      return;
+    }
+
+    toast.success("Đăng ký thành công", {
+      description: "Vui lòng kiểm tra email để xác nhận tài khoản.",
+    });
+
+    // Optional: Redirect to login or show a success message
+    router.push("/login");
   }
 
   return (
