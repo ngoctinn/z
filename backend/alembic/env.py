@@ -15,7 +15,7 @@ sys.path.append(os.getcwd())
 
 from app.core.config import settings
 # Import models here so they are registered with SQLModel.metadata
-# from app.modules.user import user_models
+from app.modules.user import user_models
 # from app.modules.appointment import appointment_models
 
 # this is the Alembic Config object, which provides
@@ -76,9 +76,11 @@ async def run_async_migrations() -> None:
     and associate a connection with the context.
 
     """
+    configuration = config.get_section(config.config_ini_section, {})
+    configuration["sqlalchemy.url"] = settings.DATABASE_URL
 
     connectable = async_engine_from_config(
-        config.get_section(config.config_ini_section, {}),
+        configuration,
         prefix="sqlalchemy.",
         poolclass=pool.NullPool,
     )

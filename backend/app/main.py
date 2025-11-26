@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
+from app.modules.user import user_routes
 
 app = FastAPI(
     title="ZenSpa API",
@@ -16,6 +17,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+app.include_router(user_routes.router, prefix="/api/v1/users", tags=["users"])
 
 @app.get("/")
 async def root():
